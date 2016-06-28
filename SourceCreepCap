@@ -1,0 +1,27 @@
+refreshSourceCreepCap: function(){
+        Source.prototype.memory = undefined;
+        
+        for(var roomN in Game.rooms){
+            var r = Game.rooms[roomN];
+            if(!r.memory.sources){
+                r.memory.sources = {};
+            }
+            
+            var sourcesFound = r.find(FIND_SOURCES);
+            for(var s in sourcesFound){
+                var freeSpace = 0;
+                var source = sourcesFound[s];
+                source.memory = r.memory.sources[source.id] = {};
+                for(var x = -1; x < 2; x++){
+                    for(var y = -1; y < 2; y++){
+                        if(r.lookForAt(LOOK_TERRAIN, x + source.pos.x, y + source.pos.y) != 'wall'){
+                            console.log(r.lookForAt(LOOK_TERRAIN, x + source.pos.x, y + source.pos.y));
+                            freeSpace++;
+                        }
+                    }
+                }
+                source.memory.freeSpaces = freeSpace;
+                source.memory.usedSpaces = 0;
+            }
+        }
+    }
