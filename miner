@@ -1,0 +1,32 @@
+ support.refreshSourceCreepCap();
+    var minerSource = -1;
+    var totalSpaces = 0;
+    for(var name in Game.rooms){
+        var room = Game.rooms[name];
+        var sources = room.find(FIND_SOURCES);
+        for(var i = 0; i < sources.length; i++){
+            var source = sources[i];
+            if((source.memory.usedSpaces < source.memory.freeSpaces) && minerSource == -1){
+                minerSource = i;
+                source.memory.usedSpaces++;
+            }
+            totalSpaces += source.memory.freeSpaces;
+        }
+    }
+
+//spawns tiny dudes to test
+if(miners.length < 1 /**totalSpaces && minerSource != -1**/){
+        Game.spawns.Spawn1.createCreep([WORK, MOVE], undefined, {role: 'miner', source: 1});
+    }
+---------------------------
+var roleMiner = {
+    
+    run: function(creep) {
+        var sources = creep.room.find(FIND_SOURCES);
+        if(creep.harvest(sources[creep.memory.source]) == ERR_NOT_IN_RANGE){
+            creep.moveTo(sources[creep.memory.source]);   
+        }
+    }
+};
+
+module.exports = roleMiner;
