@@ -1,0 +1,25 @@
+ //Container logic
+    for(var room in Game.rooms){
+        var containers = Game.rooms[room].find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_CONTAINER;
+            }
+        });
+    
+                    // console.log('TRANSFERED ENERGY ' + containers.length);
+        if(containers){
+            for(var container in containers){
+                var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' || 
+                creep.memory.role == 'ferry' ||
+                creep.memory.role =='roadRepairer' ||
+                creep.memory.role =='towerSupply');
+                // var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == ('upgrader' || 'ferry' || 'builder' || 'roadRepairer' || 'towerSupply'));
+                for(var creep in creeps){
+                    var c = creeps[creep];
+                    if(containers[container].transfer(creeps[creep], RESOURCE_ENERGY, c.carryCapacity - c.carry.energy) != ERR_NOT_IN_RANGE){
+                        // console.log("TRANSFERING ENERGY");
+                    }
+                }
+            }
+        }
+    }
